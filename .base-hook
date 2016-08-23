@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+set -eu
+
+if [ -f ".git/hooks/${0}" ]; then
+  ".git/hooks/${0}" $@
+fi
+
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+HOOKS_DIR="${DIR}/$( basename ${0} ).d"
+
+for hook in $( ls $HOOKS_DIR ); do
+    $HOOKS_DIR/$hook $@
+done
