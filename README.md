@@ -24,6 +24,11 @@ Clone this repo to your directory of choice. Git recommends using `/etc/git/hook
 git clone https://github.com/pivotal-cf-experimental/git-hooks-core
 ```
 
+This repo comes with some hooks by default that depend on
+[cred-alert](https://github.com/pivotal-cf/cred-alert/releases/latest). You'll
+need to download the latest release and put it in your PATH somewhere for the
+hooks to work.
+
 ## USAGE
 
 Point `core.hooksPath` at the directory you cloned this repo to:
@@ -42,3 +47,4 @@ chmod +x /etc/git/hooks/commit-msg.d
 ## LINKS
 
 * [githooks](https://git-scm.com/docs/githooks)
+* [cred-alert](https://github.com/pivotal-cf/cred-alert)
