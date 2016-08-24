@@ -18,10 +18,10 @@ And now that the hooks dir is outside of your repository, you can commit the glo
 
 ## INSTALLATION
 
-Clone this repo to your directory of choice. Git recommends using `/etc/git/hooks` on Linux:
+Clone this repo to your directory of choice, e.g. $HOME/workspace/git-hooks-core.
 
 ```
-git clone https://github.com/pivotal-cf-experimental/git-hooks-core
+git clone https://github.com/pivotal-cf-experimental/git-hooks-core $HOME/workspace/git-hooks-core
 ```
 
 This repo comes with some hooks by default that depend on
@@ -34,14 +34,14 @@ hooks to work.
 Point `core.hooksPath` at the directory you cloned this repo to:
 
 ```
-git config --global --add core.hooksPath /etc/git/hooks
+git config --global --add core.hooksPath $HOME/workspace/git-hooks-core
 ```
 
 Add any global hooks you'd like to their respective *.d* folder:
 
 ```
-cp my-commit-msg-hook /etc/git/hooks/commit-msg.d
-chmod +x /etc/git/hooks/commit-msg.d
+chmod +x my-commit-msg-hook
+cp my-commit-msg-hook $HOME/workspace/git-hooks-core/commit-msg.d
 ```
 
 ## LINKS
