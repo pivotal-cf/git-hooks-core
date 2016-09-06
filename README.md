@@ -29,6 +29,17 @@ This repo comes with some hooks by default that depend on
 need to download the latest release and put it in your PATH somewhere for the
 hooks to work.
 
+### CUSTOMIZATION
+
+If you're a Pivotal team and you would like your own collection of hooks then
+please add a branch to this repository with the name `team/<team-name>`. For example,
+if I was on a security team I would push a branch to `team/pcf-security`. We originally
+wanted to have people fork this repository but that requires administrator access
+for the destination organization.
+
+If you use `sprout-git` to install this then you can use the `sprout.git.hooks.revision`
+attribute to set the branch you would like to use.
+
 ## USAGE
 
 Point `core.hooksPath` at the directory you cloned this repo to:
