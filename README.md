@@ -40,6 +40,15 @@ for the destination organization.
 If you use `sprout-git` to install this then you can use the `sprout.git.hooks.revision`
 attribute to set the branch you would like to use.
 
+### CRED-ALERT
+
+You can download the `cred-alert-cli` binary for [OS X][cred-alert-osx] and
+[Linux][cred-alert-linux]. Make sure to move it to your `PATH`, rename it to
+`cred-alert-cli`, and make it executable.
+
+[cred-alert-osx]: https://s3.amazonaws.com/cred-alert/cli/current-release/cred-alert-cli_darwin
+[cred-alert-linux]: https://s3.amazonaws.com/cred-alert/cli/current-release/cred-alert-cli_linux
+
 ## USAGE
 
 Point `core.hooksPath` at the directory you cloned this repo to:
