@@ -70,6 +70,13 @@ cp my-commit-msg-hook $HOME/workspace/git-hooks-core/commit-msg.d
 This repository supports whitelisting repositories against specific files in
 the *hook_name*.d folders.
 
+```
+.
+├── whitelists      # contains a mapping of hooks to whitelists
+└── whitelists.d    # contains whitelists
+    └── cred-alert  # a whitelist
+```
+
 The `whitelists` file within git-hooks-core is used to declare which hooks are
 affected by the whitelists that live in `whitelists.d/`. The structure is as
 follows:
