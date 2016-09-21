@@ -1,0 +1,3 @@
+pre-commit.d/scan-diff-for-credentials           cred-alert
+commit-msg.d/scan-commit-msg-for-credentials     cred-alert
+post-merge.d/scan-merged-commits-for-credentials cred-alert

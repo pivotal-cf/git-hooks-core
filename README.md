@@ -13,6 +13,7 @@ If you use this repository as your `core.hooksPath`, you will be able to:
 * Retain any repository-specific hooks in `.git/hooks`
 * Add hooks that will apply to all repositories in their respective *.d* folder
 * Use multiple files for hooks rather than a single file, as Git expects
+* Whitelist specific repositories against specific hooks
 
 And now that the hooks dir is outside of your repository, you can commit the global hooks. Hooray!
 
@@ -63,6 +64,34 @@ Add any global hooks you'd like to their respective *.d* folder:
 chmod +x my-commit-msg-hook
 cp my-commit-msg-hook $HOME/workspace/git-hooks-core/commit-msg.d
 ```
+
+### Whitelists
+
+This repository supports whitelisting repositories against specific files in
+the *hook_name*.d folders.
+
+The `whitelists` file within git-hooks-core is used to declare which hooks are
+affected by the whitelists that live in `whitelists.d/`. The structure is as
+follows:
+
+```
+$HOOK_PATH $WHITELIST
+```
+
+Where `HOOK_PATH` is a relative path pointing to a file in a *hook_name*.d
+folder in the git-hooks-core directory and `WHITELIST` is the name of the file
+that resides in `git-hooks-core/whitelists.d/`.
+
+Each whitelist file should contain absolute paths to the repositories that the
+whitelist affects. For example, if you had a repository
+`/home/username/my-repo` that you wanted to whitelist against a commit-msg hook
+called `add_footer`, you would:
+
+1: Create a file, `git-hooks-core/whitelists.d/my-whitelist` with a single entry: `/home/username/my-repo`
+1: Add an entry to git-hooks-core/whitelists: `commit-msg.d/add_footer my-whitelist`
+
+`git-hooks-core/whitelists` has been preconfigured with entries for the
+(initially empty) cred-alert whitelist in `whitelists.d`.
 
 ## LINKS
 
