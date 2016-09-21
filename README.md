@@ -87,8 +87,8 @@ whitelist affects. For example, if you had a repository
 `/home/username/my-repo` that you wanted to whitelist against a commit-msg hook
 called `add_footer`, you would:
 
-1: Create a file, `git-hooks-core/whitelists.d/my-whitelist` with a single entry: `/home/username/my-repo`
-1: Add an entry to git-hooks-core/whitelists: `commit-msg.d/add_footer my-whitelist`
+1. Create a file, `git-hooks-core/whitelists.d/my-whitelist` with a single entry: `/home/username/my-repo`
+1. Add an entry to git-hooks-core/whitelists: `commit-msg.d/add_footer my-whitelist`
 
 `git-hooks-core/whitelists` has been preconfigured with entries for the
 (initially empty) cred-alert whitelist in `whitelists.d`.
