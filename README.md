@@ -25,10 +25,7 @@ Clone this repo to your directory of choice, e.g. $HOME/workspace/git-hooks-core
 git clone https://github.com/pivotal-cf-experimental/git-hooks-core $HOME/workspace/git-hooks-core
 ```
 
-This repo comes with some hooks by default that depend on
-[cred-alert](https://github.com/pivotal-cf/cred-alert/releases/latest). You'll
-need to download the latest release and put it in your PATH somewhere for the
-hooks to work.
+This repo comes with some hooks by default that depend on `cred-alert-cli`. You can download this from the links [below](https://github.com/pivotal-cf-experimental/git-hooks-core/#cred-alert).
 
 ### CUSTOMIZATION
 
