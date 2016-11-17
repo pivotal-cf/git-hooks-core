@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+grep -r --include '*.java' -E '(fit|fdescribe)\(' src/test/java > /dev/null
+if [ $? -ne 1 ]; then
+  echo "Found tests that are focused, either with fit or fdescribe. Please unfocus these tests before committing."
+  exit 1
+else
+  exit 0
+fi
