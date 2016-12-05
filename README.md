@@ -100,4 +100,3 @@ called `add_footer`, you would:
 ## LINKS
 
 * [githooks](https://git-scm.com/docs/githooks)
-* [cred-alert](https://github.com/pivotal-cf/cred-alert)
