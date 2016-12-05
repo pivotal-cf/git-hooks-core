@@ -100,3 +100,8 @@ called `add_footer`, you would:
 ## LINKS
 
 * [githooks](https://git-scm.com/docs/githooks)
+
+CLI Binaries:
+
+* [OSX][cred-alert-osx]
+* [Linux][cred-alert-linux]
