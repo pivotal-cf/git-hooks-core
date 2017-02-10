@@ -1,0 +1,22 @@
+#!/usr/bin/env ruby
+
+require 'English'
+
+puts 'Running git-focused rubocop'
+
+staged_files = `git diff --name-status --cached`.split("\n")
+staged_modified_files = staged_files.keep_if { |file_status| file_status[0] =~ /A|M/ }
+staged_modified_files = staged_modified_files.map { |file| file.split("\t")[1] }
+ruby_staged_modified_files = staged_modified_files.keep_if { |file| file =~ /(Rakefile|Gemfile^|rb|rake)/ }
+ruby_staged_modified_files = ruby_staged_modified_files.delete_if { |file| file =~ /schema|erb/ }
+ruby_staged_modified_files = ruby_staged_modified_files.delete_if { |file| File.dirname(file) =~ /^(bin|config|db|log|public|tmp|vendor|lib\/tasks|node_modules)/ }
+rubocop_file_list = ruby_staged_modified_files.join(' ')
+
+exit 0 if ruby_staged_modified_files.empty?
+
+rubocop_output = `rubocop #{rubocop_file_list}`
+
+if $CHILD_STATUS.exitstatus != 0
+  puts rubocop_output
+  exit 1
+end

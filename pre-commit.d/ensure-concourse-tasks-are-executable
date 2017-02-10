@@ -1,0 +1,13 @@
+#!/usr/bin/env ruby
+
+exit 0 unless File.basename(Dir.getwd) == 'pivnet-ci'
+
+concourse_task_directories = Dir['concourse/tasks/*']
+
+concourse_task_directories.each do |directory|
+  if File.exist?("#{directory}/run.sh") && !File.executable?("#{directory}/run.sh")
+    abort "#{directory}/run.sh is not executable"
+  elsif File.exist?("#{directory}/run.rb") && !File.executable?("#{directory}/run.rb")
+    abort "#{directory}/run.rb is not executable"
+  end
+end

@@ -1,0 +1,37 @@
+#!/usr/bin/env ruby
+
+exit 0 unless File.basename(Dir.getwd) == 'pivotal-one-network'
+
+require 'English'
+
+staged_files = `git diff --name-status --cached`.split("\n")
+staged_modified_files = staged_files.keep_if { |file_status| file_status[0] =~ /A|M/ }
+staged_modified_files = staged_modified_files.map { |file| file.split("\t")[1] }
+javascript_staged_modified_files = staged_modified_files.keep_if { |file| file =~ /\.(jsx|js)$/ }
+
+exit 0 if javascript_staged_modified_files.empty?
+
+eslint_production_file_list = javascript_staged_modified_files.map { |file| file if file =~ /app/ }.join(' ')
+eslint_test_file_list = javascript_staged_modified_files.map { |file| file if file =~ /spec/ }.join(' ')
+
+puts 'Running eslint against code...'
+
+eslint_production_code_output = `$(npm bin)/eslint --fix -c config/eslintrc #{eslint_production_file_list} 2>&1`
+eslint_production_failed = !$CHILD_STATUS.success?
+
+puts 'Running eslint against spec...'
+
+eslint_test_code_output = `$(npm bin)/eslint \
+--fix \
+-c config/eslintrc \
+--env "jasmine" --global "TestUtils" --global "mockComponent, useComponent, useInTableComponent" \
+#{eslint_test_file_list} 2>&1`
+
+eslint_test_failed = !$CHILD_STATUS.success?
+
+if eslint_production_failed || eslint_test_failed
+  puts eslint_production_code_output if eslint_production_failed
+  puts eslint_test_code_output if eslint_test_failed
+
+  exit 1
+end
