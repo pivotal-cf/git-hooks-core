@@ -1,0 +1,67 @@
+#!/bin/bash
+
+if [ "$(basename $(pwd))" != 'pivotal-one-network' ]
+then
+  exit 0
+fi
+
+# Script to ask if you want to push a WIP commit.
+# If this script exits with a non-zero status nothing will be pushed.
+#
+#
+# $1 -- Name of the remote to which the push is being done
+# $2 -- URL to which the push is being done
+#
+
+remote="$1"
+url="$2"
+develop_ref=refs/heads/develop
+
+echo -e $url
+echo -e $remote
+
+z40=0000000000000000000000000000000000000000
+WIPS=()
+
+while read local_ref local_sha remote_ref remote_sha
+do
+  echo -e $remote_ref
+  if [ "$local_sha" = $z40 ]
+  then
+    # Handle delete
+    :
+  else
+    if [ "$remote_ref" != "$develop_ref" ]
+    then
+      exit 0
+    fi
+
+    if [ "$remote_sha" = $z40 ]
+    then
+      # New branch, examine all commits
+      range="$local_sha"
+    else
+      # Update to existing branch, examine new commits
+      range="$remote_sha..$local_sha"
+    fi
+
+    # Check for WIP commit
+    commit=`git rev-list -i --grep 'WIP' "$range"`
+  fi
+done
+
+exec < /dev/tty
+for i in ${commit[@]}; do
+  echo -e "Found WIP commit:\n"
+  echo `git show -s --format="%h %C(yellow)%ci%Creset %Cgreen%an%Creset | %s" $i`
+  echo -e "\nDo you want to continue with push? [y,n]"
+  read -n1 response
+  if [[ $response == "y" ]]; then
+    echo -e "\n\nContinue commit\n"
+  else
+    echo -e "\n\nAborting commit\n"
+    exit 1
+  fi
+done
+
+exit 0

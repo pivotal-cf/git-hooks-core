@@ -1,0 +1,26 @@
+#!/usr/bin/env ruby
+
+# inspired by https://git-scm.com/book/en/v2/Customizing-Git-An-Example-Git-Enforced-Policy
+# ... which is MIT Licensed, just saying
+
+message_file = ARGV[0]
+message = File.read(message_file)
+
+tracker_story_id_or_wip_regex = /^wip|\[(finishes|fixes)?\s*#\d+\]/i
+
+violation_found = !tracker_story_id_or_wip_regex.match(message)
+
+if violation_found
+  indented_message = ''
+  message.each_line { |line| indented_message += "    #{line}" }
+
+  puts 'No Tracker story ID was spotted in this commit message:'
+  puts '    ------------------------------------------------------------------------'
+  puts indented_message
+  puts '    ------------------------------------------------------------------------'
+  puts 'If this is a WIP, add "WIP" to the front of your commit message'
+
+  exit 1
+end
+
+exit 0
