@@ -7,6 +7,16 @@ if [ -f ".git/hooks/${script_name}" ]; then
   ".git/hooks/${script_name}" $@
 fi
 
+# check that we're not trying to push a WIP to master
+CURRENT_BRANCH=$(git branch | grep '*' | awk '{ print $2 }')
+if [ "$CURRENT_BRANCH" -eq "master" ]; then
+  if [ $(git log -n 10 --oneline | grep -c -i 'wip') -ne 0  ]; then
+    (>&2 echo "Looks like you are trying to push a WIP commit to master, which is naughty.")
+    exit 1
+  fi
+fi
+
+
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 WHITELISTS=${DIR}/whitelists
 
