@@ -5,7 +5,7 @@ set -eu
 # check that we're not trying to push a WIP to master
 CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
 if [ "${CURRENT_BRANCH}" == "master" ]; then
-  if [ $(git log -n 10 --oneline | grep -c -i 'wip') -ne 0  ]; then
+  if [ $(git log origin/master..master --oneline | grep -c -i 'wip') -ne 0  ]; then
     (>&2 echo "Looks like you are trying to push a WIP commit to master, which is naughty.")
     exit 1
   fi
