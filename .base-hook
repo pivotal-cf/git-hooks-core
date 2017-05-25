@@ -2,9 +2,10 @@
 
 set -eu
 
+git_dir=$( git rev-parse --git-dir )
 script_name=$(basename $0)
-if [ -f ".git/hooks/${script_name}" ]; then
-  ".git/hooks/${script_name}" $@
+if [ -f "${git_dir}/hooks/${script_name}" ]; then
+  "${git_dir}/hooks/${script_name}" $@
 fi
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
