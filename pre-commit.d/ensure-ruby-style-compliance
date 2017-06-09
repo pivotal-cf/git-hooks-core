@@ -14,7 +14,12 @@ rubocop_file_list = ruby_staged_modified_files.join(' ')
 
 exit 0 if ruby_staged_modified_files.empty?
 
-rubocop_output = `rubocop #{rubocop_file_list}`
+if File.exist?('Gemfile')
+  ruby_version = File.read('Gemfile')[/ruby\s+(.+)$/, 1].tr("'\"", '')
+  rubocop_output = `RBENV_VERSION=#{ruby_version} rbenv exec bundle exec rubocop #{rubocop_file_list}`
+else
+  rubocop_output = `rubocop #{rubocop_file_list}`
+end
 
 if $CHILD_STATUS.exitstatus != 0
   puts rubocop_output
