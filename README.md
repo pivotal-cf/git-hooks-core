@@ -40,9 +40,17 @@ attribute to set the branch you would like to use.
 
 ### CRED-ALERT
 
-You can download the `cred-alert-cli` binary for [OS X][cred-alert-osx] and
-[Linux][cred-alert-linux]. Make sure to move it to your `PATH`, rename it to
-`cred-alert-cli`, and make it executable.
+To install the `cred-alert-cli` binary download the version for your OS 
+([macOs][cred-alert-osx] or [Linux][cred-alert-linux]), rename it to `cred-alert-cli`,
+make it executable, and move it to a directory in `${PATH}`.
+
+```
+os_name=$(uname | awk '{print tolower($1)}')
+curl -o cred-alert-cli \
+  https://s3.amazonaws.com/cred-alert/cli/current-release/cred-alert-cli_${os_name}
+chmod 755 cred-alert-cli
+mv cred-alert-cli /usr/local/bin # <= or other directory in ${PATH}
+```
 
 [cred-alert-osx]: https://s3.amazonaws.com/cred-alert/cli/current-release/cred-alert-cli_darwin
 [cred-alert-linux]: https://s3.amazonaws.com/cred-alert/cli/current-release/cred-alert-cli_linux
