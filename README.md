@@ -19,28 +19,11 @@ And now that the hooks dir is outside of your repository, you can commit the glo
 
 ## INSTALLATION
 
-Clone this repo to your directory of choice, e.g. $HOME/workspace/git-hooks-core.
+### Installing cred-alert-cli
 
-```
-git clone https://github.com/pivotal-cf/git-hooks-core $HOME/workspace/git-hooks-core
-```
+This repo comes with some hooks that depend on `cred-alert-cli`.
 
-This repo comes with some hooks by default that depend on `cred-alert-cli`. You can download this from the links [below](https://github.com/pivotal-cf/git-hooks-core/#cred-alert).
-
-### CUSTOMIZATION
-
-If you're a Pivotal team and you would like your own collection of hooks then
-please add a branch to this repository with the name `team/<team-name>`. For example,
-if I was on a security team I would push a branch to `team/pcf-security`. We originally
-wanted to have people fork this repository but that requires administrator access
-for the destination organization.
-
-If you use `sprout-git` to install this then you can use the `sprout.git.hooks.revision`
-attribute to set the branch you would like to use.
-
-### CRED-ALERT
-
-To install the `cred-alert-cli` binary download the version for your OS 
+To install the `cred-alert-cli` binary download the version for your OS
 ([macOs][cred-alert-osx] or [Linux][cred-alert-linux]), rename it to `cred-alert-cli`,
 make it executable, and move it to a directory in `${PATH}`.
 
@@ -50,18 +33,23 @@ curl -o cred-alert-cli \
   https://s3.amazonaws.com/cred-alert/cli/current-release/cred-alert-cli_${os_name}
 chmod 755 cred-alert-cli
 mv cred-alert-cli /usr/local/bin # <= or other directory in ${PATH}
+./cred-alert-cli --help # <= make sure cred-alert-cli works.
 ```
 
 [cred-alert-osx]: https://s3.amazonaws.com/cred-alert/cli/current-release/cred-alert-cli_darwin
 [cred-alert-linux]: https://s3.amazonaws.com/cred-alert/cli/current-release/cred-alert-cli_linux
 
-## USAGE
+### Installing git-hooks-core
 
-Point `core.hooksPath` at the directory you cloned this repo to:
+Clone this repo to your directory of choice, e.g. $HOME/workspace/git-hooks-core.
+Point `core.hooksPath` at the installation directory.
 
 ```
+git clone https://github.com/pivotal-cf/git-hooks-core $HOME/workspace/git-hooks-core
 git config --global --add core.hooksPath $HOME/workspace/git-hooks-core
 ```
+
+### (Optional) Adding global hooks
 
 Add any global hooks you'd like to their respective *.d* folder:
 
@@ -70,10 +58,10 @@ chmod +x my-commit-msg-hook
 cp my-commit-msg-hook $HOME/workspace/git-hooks-core/commit-msg.d
 ```
 
-### Whitelists
+### (Optional) Setting whitelists
 
-This repository supports whitelisting repositories against specific files in
-the *hook_name*.d folders.
+Whitelist inform git-hooks-core to ignore certain repos. This is handy for private repos containing secret keys.
+The structure of whitelist is as follows:
 
 ```
 .
@@ -81,6 +69,13 @@ the *hook_name*.d folders.
 └── whitelists.d    # contains whitelists
     └── cred-alert  # a whitelist
 ```
+
+All you need to do it to add the absolute path of your whitelist repo to file whitelist.d/cred-alert
+
+For example, a continuous-integration repo contains secret keys and which need to put it to the whitelist.
+` echo $HOME/workspace/continuous-integration >> whitelists.d/cred-alert`
+
+#### Additional whitelist customizations
 
 The `whitelists` file within git-hooks-core is used to declare which hooks are
 affected by the whitelists that live in `whitelists.d/`. The structure is as
@@ -104,6 +99,30 @@ called `add_footer`, you would:
 
 `git-hooks-core/whitelists` has been preconfigured with entries for the
 (initially empty) cred-alert whitelist in `whitelists.d`.
+
+## VERIFY IT ALL WORKS
+
+```
+mkdir $HOME/workspace/cred-alert-test; cd $HOME/workspace/cred-alert-test; git init; cat <<'EOF'>> test.key
+-----BEGIN RSA PRIVATE KEY-----
+fakersakeydata
+-----END RSA PRIVATE KEY-----
+EOF
+git add test.key;
+git commit -m "Testing credential commit" # You should see a warning after this command
+mv $HOME/workspace/cred-alert-test /tmp
+```
+
+## CUSTOMIZATION
+
+If you're a Pivotal team and you would like your own collection of hooks then
+please add a branch to this repository with the name `team/<team-name>`. For example,
+if I was on a security team I would push a branch to `team/pcf-security`. We originally
+wanted to have people fork this repository but that requires administrator access
+for the destination organization.
+
+If you use `sprout-git` to install this then you can use the `sprout.git.hooks.revision`
+attribute to set the branch you would like to use.
 
 ## LINKS
 
