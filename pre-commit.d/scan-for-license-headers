@@ -1,0 +1,27 @@
+#!/bin/bash
+
+IFS=$'\n'
+
+if [ ! -f .licensecheck ]; then
+    exit 0
+fi
+
+files_without_header=()
+changed_files="$(git diff --name-only --diff-filter=AM --cached | grep -E -v '^vendor/')"
+if [ -n "$changed_files" ]; then
+    for changed_file in $changed_files; do
+        files_without_header+=($(grep -L "Copyright (C) 2018-Present Pivotal Software, Inc. All rights reserved." ${changed_file}))
+    done
+
+    if [ -n "$files_without_header" ]; then
+        echo "License header not found in the following added or modified files:"
+        for file in "${files_without_header[@]}"; do
+            echo "   - $file"
+        done
+        echo "Please add the license header to these files"
+        echo "To commit anyway, add '-n' flag to 'git ci'"
+        exit 1
+    fi
+fi
+
+exit 0
