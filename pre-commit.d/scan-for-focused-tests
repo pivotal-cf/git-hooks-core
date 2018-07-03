@@ -1,0 +1,23 @@
+#!/bin/bash
+
+IFS=$'\n'
+
+files_with_focused_tests=()
+changed_files="$(git diff --name-only --diff-filter=AM --cached | grep -E -v '^vendor/')"
+if [ -n "$changed_files" ]; then
+    for changed_file in $changed_files; do
+        files_with_focused_tests+=($(grep -l -E "(FDescribe|FContext|FIt)" ${changed_file}))
+    done
+
+    if [ -n "$files_with_focused_tests" ]; then
+        echo "Focused tests found in the following added or modified files:"
+        for file in "${files_with_focused_tests[@]}"; do
+            echo "   - $file"
+        done
+        echo "Please remove the focused tests from these files"
+        echo "To commit anyway, add '-n' flag to 'git ci'"
+        exit 1
+    fi
+fi
+
+exit 0
