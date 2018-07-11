@@ -1,12 +1,15 @@
 #!/bin/bash
 
 IFS=$'\n'
+FOCUSED_TESTS_REGEX="(FDescribe|FContext|FIt)"
 
 files_with_focused_tests=()
 changed_files="$(git diff --name-only --diff-filter=AM --cached | grep -E -v '^vendor/')"
 if [ -n "$changed_files" ]; then
     for changed_file in $changed_files; do
-        files_with_focused_tests+=($(grep -l -E "(FDescribe|FContext|FIt)" ${changed_file}))
+        if git diff -U0 --cached -- "$changed_file" | grep -q -E "^\\+.*$FOCUSED_TESTS_REGEX"; then
+            files_with_focused_tests+=("$changed_file")
+        fi
     done
 
     if [ -n "$files_with_focused_tests" ]; then
