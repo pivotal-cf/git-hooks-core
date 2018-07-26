@@ -8,7 +8,9 @@ reset=$(tput sgr0)
 
 while read local_ref local_sha remote_ref remote_sha
 do
-    if git show --pretty="format:%ce" $local_sha | grep "@example.com$"; then
+    author=$(git --no-pager show -s --format="%aN" $local_sha)
+    committer=$(git --no-pager show -s --format="%cN" $local_sha)
+    if ! grep -q "$author" ~/.git-authors || ! grep -q "$comitter" ~/.git-authors ; then
         echo >&2 "${red}Bad committer on commit $(echo "$local_sha" | cut -c 1-8). Fix it before you push${reset}"
         exit 1
     fi
