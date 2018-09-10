@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+java -jar /usr/local/bin/google-java-format*.jar --replace $(git diff --name-only --cached)
+git add $(git diff --name-only --cached)
+
+exit 0
