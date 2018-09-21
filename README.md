@@ -33,7 +33,7 @@ curl -o cred-alert-cli \
   https://s3.amazonaws.com/cred-alert/cli/current-release/cred-alert-cli_${os_name}
 chmod 755 cred-alert-cli
 mv cred-alert-cli /usr/local/bin # <= or other directory in ${PATH}
-./cred-alert-cli --help # <= make sure cred-alert-cli works.
+cred-alert-cli --help # <= make sure cred-alert-cli works.
 ```
 
 [cred-alert-osx]: https://s3.amazonaws.com/cred-alert/cli/current-release/cred-alert-cli_darwin
