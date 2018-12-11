@@ -18,5 +18,12 @@ rubocop_output = `rubocop #{rubocop_file_list}`
 
 if $CHILD_STATUS.exitstatus != 0
   puts rubocop_output
+
+  puts "autofix? (Y|N) "
+  choice = IO.new(IO.sysopen("/dev/tty", "r"), "r").gets.chomp.downcase
+
+  if choice == 'y'
+    rubocop_output = `rubocop -a #{rubocop_file_list}`
+  end
   exit 1
 end
