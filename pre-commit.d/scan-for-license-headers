@@ -10,7 +10,7 @@ files_without_header=()
 changed_files="$(git diff --name-only --diff-filter=AM --cached | grep -E -v '^vendor/')"
 if [ -n "$changed_files" ]; then
     for changed_file in $changed_files; do
-        files_without_header+=($(grep -L "Copyright (C) 2018-Present Pivotal Software, Inc. All rights reserved." ${changed_file}))
+        files_without_header+=($(grep -L "Copyright (C) .*-Present Pivotal Software, Inc. All rights reserved." ${changed_file}))
     done
 
     if [ -n "$files_without_header" ]; then
