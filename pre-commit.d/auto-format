@@ -1,9 +1,7 @@
 #!/usr/bin/env bash
-
+git stash -k -u
 java -jar /usr/local/bin/google-java-format*.jar --replace $(git diff --name-only --cached)
 git add $(git diff --name-only --cached)
-
-git diff --name-only --cached --relative | grep '\.kts\?$' | xargs ktlint --relative .
-if [ $? -ne 0 ]; then exit 1; fi
+git stash pop
 
 exit 0
