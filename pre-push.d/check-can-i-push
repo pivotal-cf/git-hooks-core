@@ -5,6 +5,11 @@ while read local_ref local_sha remote_ref remote_sha
 do
     if [ "$REPO" = "cloud_controller_ng" ] && [ -z "$CAN_I_PUSH" ] && [ "$remote_ref" = "refs/heads/master" ]
     then
+        read -u 1 -p "Attempting tp push while can-i-push is red. Override? [y/n]: " override
+        if [ "$override" == "y" ]
+        then
+            exit 0
+        fi
         printf "\e[1;31m%s\e[0m\n" "Attempting to push to master while can-i-push is red, please check with CAPI team"
         tput sgr0
         exit 1
