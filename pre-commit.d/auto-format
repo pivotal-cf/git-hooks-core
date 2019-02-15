@@ -1,7 +1,0 @@
-#!/usr/bin/env bash
-git stash -k -u
-java -jar /usr/local/bin/google-java-format*.jar --replace $(git diff --name-only --cached)
-git add $(git diff --name-only --cached)
-git stash pop
-
-exit 0
