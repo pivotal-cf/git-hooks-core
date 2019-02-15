@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+REPO=$( git rev-parse --git-dir | grep -o "cloud_controller_ng$")
+CAN_I_PUSH=$(curl canibump.cfapps.io -H "Accept: application/json" -s | grep "true")
+while read local_ref local_sha remote_ref remote_sha
+do
+    if [ "$REPO" = "cloud_controller_ng" ] && [ -z "$CAN_I_PUSH" ] && [ "$remote_ref" = "refs/heads/master" ]
+    then
+        printf "\e[1;31m%s\e[0m\n" "Attempting to push to master while can-i-push is red, please check with CAPI team"
+        tput sgr0
+        exit 1
+    fi
+done
