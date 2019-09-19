@@ -13,7 +13,7 @@ If you use this repository as your `core.hooksPath`, you will be able to:
 * Retain any repository-specific hooks in `.git/hooks`
 * Add hooks that will apply to all repositories in their respective *.d* folder
 * Use multiple files for hooks rather than a single file, as Git expects
-* Whitelist specific repositories against specific hooks (See [Whitelists](https://github.com/pivotal-cf/git-hooks-core#whitelists))
+* Whitelist specific repositories against specific hooks (See [Whitelists](https://github.com/pivotal-cf/git-hooks-core#optional-setting-whitelists))
 
 And now that the hooks dir is outside of your repository, you can commit the global hooks. Hooray!
 
