@@ -1,0 +1,79 @@
+#!/usr/bin/env bash
+
+COMMIT_MSG_FILE=$1
+
+if [[ -z "$PIVOTAL_TRACKER_TOKEN" || -z "$PIVOTAL_TRACKER_PROJECT_ID" ]]; then
+  echo "WARNING: Can't prompt for Pivotal Tracker id without \$PIVOTAL_TRACKER_TOKEN "
+  echo "or \$PIVOTAL_TRACKER_PROJECT_ID"
+  echo "Please include this variable in your .envrc."
+  exit 1
+fi
+#if [[ $PIVOTAL_TRACKER_PROJECTS_AND_IDS =~ "(([^\s,=]+=[^\s,=]+)(?:,\s*)?)+" ]]; then
+#  echo "This script requieres the \$PIVOTAL_TRACKER_PROJECTS_AND_IDS to be defined "
+#  echo "in an your .envrc like the following Releng_Platform=2123234,Releng_Delivery=21342"
+#  exit 0
+#fi
+if [[ -z "$(command -v jq)" ]]; then
+  echo "WARNING: Can't prompt for Pivotal Tracker id without installing jq."
+  echo "Please brew install jq."
+  exit 1
+fi
+if [[ -z "$(command -v fzf)" ]]; then
+  echo "WARNING: Can't prompt for Pivotal Tracker id without installing fzf."
+  echo "Please brew install fzf."
+  exit 1
+fi
+
+#exec < /dev/tty
+#
+#TRACKER_PROJ_NAMES=()
+#TRACKER_PROJ_IDS=()
+#
+#PIVOTAL_TRACKER_PROJECT_ID=
+#
+#while read -d, -r pair; do
+#  IFS='=' read -r key val <<<"$pair"
+#  echo "$key = $val"
+#  TRACKER_PROJ_NAMES+=($key)
+#  TRACKER_PROJ_IDS+=($value)
+#done <<< "$PIVOTAL_TRACKER_PROJECTS_AND_IDS,"
+#
+#echo $TRACKER_PROJ_NAMES
+#echo $TRACKER_PROJ_IDS
+#
+#PS3="Please enter your choice: "
+#select answer in "${TRACKER_PROJ_NAMES[@]}"; do
+#  index=0
+#  for item in "${TRACKER_PROJ_NAMES[@]}"; do
+#    if [[ $item == $answer ]]; then
+#      echo "the index $index"
+#PIVOTAL_TRACKER_PROJECT_ID=TRACKER_PROJ_IDS[$index]
+#      break 2
+#    fi
+#    index=$((index+1))
+#  done
+#done
+#echo $answer
+#echo $PIVOTAL_TRACKER_PROJECT_ID
+
+ISSUE_ID=$( \
+  curl -sfG -X GET -H "X-TrackerToken: $PIVOTAL_TRACKER_TOKEN" \
+    --data-urlencode "filter=state:started" \
+    --data-urlencode fields=name https://www.pivotaltracker.com/services/v5/projects/$PIVOTAL_TRACKER_PROJECT_ID/stories \
+  | jq -r 'map({id: .id|tostring, name: .name})|map(.id+": "+.name)|.[]' \
+  | fzf --multi \
+  | sed -E -e 's/^([[:digit:]]+):.+$/#\1/' \
+  | tr '\n' ', ' \
+  | sed -E -e 's/^(.*),$/[\1]/'
+)
+if [[ ! -z "$ISSUE_ID" ]]; then
+  FILE="$COMMIT_MSG_FILE"
+  cat $FILE > /tmp/filecontents
+  printf "\n\n" > $FILE
+  echo $ISSUE_ID >> $FILE
+  cat /tmp/filecontents | tail -n +2 >> $FILE
+  rm /tmp/filecontents
+else
+  echo "You didn't pick a Pivotal Tracker issue ಠ_ಠ"
+  exit 0
+fi
