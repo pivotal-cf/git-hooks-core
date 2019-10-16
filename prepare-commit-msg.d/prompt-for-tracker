@@ -1,6 +1,12 @@
 #!/usr/bin/env bash
 
 COMMIT_MSG_FILE=$1
+COMMIT_SOURCE=$2
+
+if [[ "${COMMIT_SOURCE}" != template ]]; then
+  # User is editing an existing commit or has provided a message via -m.
+  exit 0
+fi
 
 if [[ -z "$PIVOTAL_TRACKER_TOKEN" || -z "$PIVOTAL_TRACKER_PROJECT_ID" ]]; then
   echo "WARNING: Can't prompt for Pivotal Tracker id without \$PIVOTAL_TRACKER_TOKEN "
