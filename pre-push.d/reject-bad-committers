@@ -1,0 +1,16 @@
+#!/bin/bash
+
+remote="$1"
+url="$2"
+
+while read local_ref local_sha remote_ref remote_sha
+do
+    author=$(git --no-pager show -s --format="%aN" $local_sha)
+    committer=$(git --no-pager show -s --format="%cN" $local_sha)
+    if ! grep -q "$author" ~/.git-authors || ! grep -q "$committer" ~/.git-authors ; then
+        echo >&2 "Committer on commit $(echo "$local_sha" | cut -c 1-8) is not in .git-authors. Fix it or push with --no-verify."
+        exit 1
+    fi
+done
+
+exit 0
