@@ -1,7 +1,7 @@
 #!/bin/bash
 
 IFS=$'\n'
-FOCUSED_TESTS_REGEX="(FDescribe|FContext|FIt)"
+FOCUSED_TESTS_REGEX="(FDescribe|FContext|FIt|FWhen)"
 
 files_with_focused_tests=()
 changed_files="$(git diff --name-only --diff-filter=AM --cached | grep -E -v '^vendor/')"
