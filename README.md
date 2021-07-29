@@ -23,21 +23,11 @@ And now that the hooks dir is outside of your repository, you can commit the glo
 
 This repo comes with some hooks that depend on `cred-alert-cli`.
 
-To install the `cred-alert-cli` binary download the version for your OS
-([macOs][cred-alert-osx] or [Linux][cred-alert-linux]), rename it to `cred-alert-cli`,
-make it executable, and move it to a directory in `${PATH}`.
-
-```
-os_name=$(uname | awk '{print tolower($1)}')
-curl -o cred-alert-cli \
-  https://s3.amazonaws.com/cred-alert/cli/current-release/cred-alert-cli_${os_name}
-chmod 755 cred-alert-cli
-mv cred-alert-cli /usr/local/bin # <= or other directory in ${PATH}
-cred-alert-cli --help # <= make sure cred-alert-cli works.
-```
-
-[cred-alert-osx]: https://s3.amazonaws.com/cred-alert/cli/current-release/cred-alert-cli_darwin
-[cred-alert-linux]: https://s3.amazonaws.com/cred-alert/cli/current-release/cred-alert-cli_linux
+To install the `cred-alert-cli` binary, view the [latest release on GitHub](
+https://github.com/pivotal-cf/cred-alert/releases/latest) and download either
+`cred-alert-cli_darwin` (for macOS) or `cred-alert-cli_linux` (for Linux).
+Rename it to `cred-alert-cli`, make it executable, and move it to a directory
+in `${PATH}`.
 
 ### Installing git-hooks-core
 
@@ -127,8 +117,4 @@ attribute to set the branch you would like to use.
 ## LINKS
 
 * [githooks](https://git-scm.com/docs/githooks)
-
-CLI Binaries:
-
-* [OSX][cred-alert-osx]
-* [Linux][cred-alert-linux]
+* [cred-alert](https://github.com/pivotal-cf/cred-alert)
