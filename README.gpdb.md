@@ -21,6 +21,8 @@ Point `core.hooksPath` at the installation directory.
 
 ```
 git clone https://github.com/pivotal-cf/git-hooks-core $HOME/workspace/git-hooks-core
+cd $HOME/workspace/git-hooks-core
+git checkout team/gpdb
 git config --global --add core.hooksPath $HOME/workspace/git-hooks-core
 ```
 
