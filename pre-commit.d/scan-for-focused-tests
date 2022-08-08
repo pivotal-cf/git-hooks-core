@@ -4,7 +4,7 @@ IFS=$'\n'
 FOCUSED_TESTS_REGEX="(FDescribe|FContext|FIt|FWhen)"
 
 files_with_focused_tests=()
-changed_files="$(git diff --name-only --diff-filter=AM --cached | grep -E -v '^vendor/')"
+changed_files="$(git diff --name-only --diff-filter=AM --cached | grep -E -v '^vendor/' | grep -E '.*\.go$')"
 if [ -n "$changed_files" ]; then
     for changed_file in $changed_files; do
         if git diff -U0 --cached -- "$changed_file" | grep -q -E "^\\+.*$FOCUSED_TESTS_REGEX"; then
