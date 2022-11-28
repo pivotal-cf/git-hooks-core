@@ -2,10 +2,16 @@
 
 set -eu
 
+_stdin=$(cat)
+
 git_dir=$( git rev-parse --git-dir )
 script_name=$(basename $0)
 if [ -f "${git_dir}/hooks/${script_name}" ]; then
-  "${git_dir}/hooks/${script_name}" $@
+  if [ -z "${_stdin}" ]; then
+      "${git_dir}/hooks/${script_name}" $@
+  else
+      "${git_dir}/hooks/${script_name}" $@ <<< ${_stdin}
+  fi
 fi
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
@@ -53,5 +59,9 @@ for hook in $( ls $HOOKS_DIR ); do
     fi
   fi
 
-  $HOOKS_DIR/$hook $@
+  if [ -z "${_stdin}" ]; then
+      $HOOKS_DIR/$hook $@
+  else
+      $HOOKS_DIR/$hook $@ <<< ${_stdin}
+  fi
 done
