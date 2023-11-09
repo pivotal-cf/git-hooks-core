@@ -9,11 +9,11 @@ if [ -f "${git_dir}/hooks/${script_name}" ]; then
 fi
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-WHITELISTS=${DIR}/whitelists
+EXCLUDELIST=${DIR}/excludelist
 
-whitelisted() {
+excluded() {
   file=$1
-  path=${DIR}/whitelists.d/$file
+  path=${DIR}/excludelist.d/$file
 
   if [ -f "${path}" ]; then
     while read -r; do
@@ -26,18 +26,18 @@ whitelisted() {
   return 1
 }
 
-whitelist=""
+excludelist=""
 
-has_whitelist() {
+is_excluded() {
   hookPath=$1
 
   while read -ra LINE; do
-    whitelistEntry="${LINE[0]}"
-    if [ "$hookPath" == "$whitelistEntry" ]; then
-      whitelist="${LINE[1]}"
+    excludeListEntry="${LINE[0]}"
+    if [ "$hookPath" == "$excludeListEntry" ]; then
+      excludelist="${LINE[1]}"
       return 0
     fi
-  done < ${WHITELISTS}
+  done < ${EXCLUDELIST}
 
   return 1
 }
@@ -47,8 +47,8 @@ HOOKS_DIR="${DIR}/$( basename ${0} ).d"
 for hook in $( ls $HOOKS_DIR ); do
   REL_HOOK="$( basename ${0} ).d"/$hook
 
-  if has_whitelist $REL_HOOK; then
-    if whitelisted $whitelist; then
+  if is_excluded $REL_HOOK; then
+    if excluded $excludelist; then
       continue
     fi
   fi

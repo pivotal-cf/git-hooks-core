@@ -13,7 +13,7 @@ If you use this repository as your `core.hooksPath`, you will be able to:
 * Retain any repository-specific hooks in `.git/hooks`
 * Add hooks that will apply to all repositories in their respective *.d* folder
 * Use multiple files for hooks rather than a single file, as Git expects
-* Whitelist specific repositories against specific hooks (See [Whitelists](https://github.com/pivotal-cf/git-hooks-core#optional-setting-whitelists))
+* Excludelist specific repositories against specific hooks (See [Excludelist](https://github.com/pivotal-cf/git-hooks-core#optional-setting-excludelist))
 
 And now that the hooks dir is outside of your repository, you can commit the global hooks. Hooray!
 
@@ -48,47 +48,47 @@ chmod +x my-commit-msg-hook
 cp my-commit-msg-hook $HOME/workspace/git-hooks-core/commit-msg.d
 ```
 
-### (Optional) Setting whitelists
+### (Optional) Setting excludelist
 
 Whitelist inform git-hooks-core to ignore certain repos. This is handy for private repos containing secret keys.
-The structure of whitelist is as follows:
+The structure of exlcudelist is as follows:
 
 ```
 .
-├── whitelists      # contains a mapping of hooks to whitelists
-└── whitelists.d    # contains whitelists
-    └── cred-alert  # a whitelist
+├── excludelist      # contains a mapping of hooks to excludelist
+└── excludelist.d    # contains excludelist
+    └── cred-alert  # a excludelist
 ```
 
-All you need to do it to add the absolute path of your whitelist repo to file whitelist.d/cred-alert
+All you need to do it to add the absolute path of your excludelist repo to file excludelist.d/cred-alert
 
-For example, a continuous-integration repo contains secret keys and which need to put it to the whitelist.
-` echo $HOME/workspace/continuous-integration >> whitelists.d/cred-alert`
+For example, a continuous-integration repo contains secret keys and which need to put it to the excludelist.
+` echo $HOME/workspace/continuous-integration >> excludelist.d/cred-alert`
 
-#### Additional whitelist customizations
+#### Additional excludelist customizations
 
-The `whitelists` file within git-hooks-core is used to declare which hooks are
-affected by the whitelists that live in `whitelists.d/`. The structure is as
+The `excludelist` file within git-hooks-core is used to declare which hooks are
+affected by the excludelist that live in `excludelist.d/`. The structure is as
 follows:
 
 ```
-$HOOK_PATH $WHITELIST
+$HOOK_PATH $EXCLUDELIST
 ```
 
 Where `HOOK_PATH` is a relative path pointing to a file in a *hook_name*.d
-folder in the git-hooks-core directory and `WHITELIST` is the name of the file
-that resides in `git-hooks-core/whitelists.d/`.
+folder in the git-hooks-core directory and `EXCLUDELIST` is the name of the file
+that resides in `git-hooks-core/excludelist.d/`.
 
-Each whitelist file should contain absolute paths to the repositories that the
-whitelist affects. For example, if you had a repository
-`/home/username/my-repo` that you wanted to whitelist against a commit-msg hook
+Each exlcudelist file should contain absolute paths to the repositories that the
+exlcudelist affects. For example, if you had a repository
+`/home/username/my-repo` that you wanted to exlcudelist against a commit-msg hook
 called `add_footer`, you would:
 
-1. Create a file, `git-hooks-core/whitelists.d/my-whitelist` with a single entry: `/home/username/my-repo`
-1. Add an entry to git-hooks-core/whitelists: `commit-msg.d/add_footer my-whitelist`
+1. Create a file, `git-hooks-core/excludelist.d/my-exlcudelist` with a single entry: `/home/username/my-repo`
+1. Add an entry to git-hooks-core/excludelist: `commit-msg.d/add_footer my-excludelist`
 
-`git-hooks-core/whitelists` has been preconfigured with entries for the
-(initially empty) cred-alert whitelist in `whitelists.d`.
+`git-hooks-core/excludelist` has been preconfigured with entries for the
+(initially empty) cred-alert exlcudelist in `excludelist.d`.
 
 ## VERIFY IT ALL WORKS
 
