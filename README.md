@@ -50,7 +50,7 @@ cp my-commit-msg-hook $HOME/workspace/git-hooks-core/commit-msg.d
 
 ### (Optional) Setting excludelist
 
-Whitelist inform git-hooks-core to ignore certain repos. This is handy for private repos containing secret keys.
+Exludelist inform git-hooks-core to ignore certain repos. This is handy for private repos containing secret keys.
 The structure of exlcudelist is as follows:
 
 ```

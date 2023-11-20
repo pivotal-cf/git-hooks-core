@@ -1,3 +1,4 @@
 pre-commit.d/scan-diff-for-credentials           cred-alert
+pre-commit.d/pre_commit.sh                       mix-check
 commit-msg.d/scan-commit-msg-for-credentials     cred-alert
 post-merge.d/scan-merged-commits-for-credentials cred-alert
